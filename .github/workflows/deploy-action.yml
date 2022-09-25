@@ -19,7 +19,7 @@ on:
         required: true
 
 jobs:
-  deploy-react:
+  deploy-app:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     concurrency:
