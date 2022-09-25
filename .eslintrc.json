@@ -53,6 +53,7 @@
       }
     ],
     "react/require-default-props": "off", // Since we are not using prop-types
+    "no-param-reassign": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
