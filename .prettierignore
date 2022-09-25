@@ -1,0 +1,12 @@
+# directories
+node_modules/
+dist/
+build/
+coverage/
+logs/
+
+# logs
+*-error.log
+
+# misc
+.eslintcache
