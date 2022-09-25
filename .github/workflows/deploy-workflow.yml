@@ -11,7 +11,6 @@ jobs:
   lint-and-test:
     name: Lint and unit test
     runs-on: ubuntu-latest
-    environment: dev
     steps:
       - name: Checkout ${{ github.ref }} branch
         uses: actions/checkout@v3
@@ -31,7 +30,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Set environment variables
-        run: echo ${{ secrets.APP_ENV }} | openssl base64 -d -A -out .env
+        run: echo ${{ secrets.TEST_APP_ENV }} | openssl base64 -d -A -out .env
 
       - name: Check Types
         run: pnpm check:types

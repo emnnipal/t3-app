@@ -23,6 +23,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Set environment variables
+        run: echo ${{ secrets.TEST_APP_ENV }} | openssl base64 -d -A -out .env
+
       - name: Run ESLint
         run: pnpm lint
 
