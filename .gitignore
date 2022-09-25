@@ -20,6 +20,7 @@
 /build
 
 # misc
+.eslintcache
 .DS_Store
 *.pem
 .vscode/*
