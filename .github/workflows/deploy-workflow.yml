@@ -11,6 +11,7 @@ jobs:
   lint-and-test:
     name: Lint and unit test
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Checkout ${{ github.ref }} branch
         uses: actions/checkout@v3
@@ -29,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Set environment variables
+        run: echo ${{ secrets.APP_ENV }} | openssl base64 -d -A -out .env
+
       - name: Check Types
         run: pnpm check:types
 
@@ -42,7 +46,7 @@ jobs:
     name: Deploy React App to Dev
     if: github.event.ref == 'refs/heads/develop'
     needs: lint-and-test
-    uses: ./.github/workflows/deploy-app-workflow.yml
+    uses: ./.github/workflows/deploy-action.yml
     with:
       environment: dev
       branch: develop
@@ -91,7 +95,7 @@ jobs:
     name: Deploy React App to Production
     if: needs.release.outputs.skipped == 'false'
     needs: release
-    uses: ./.github/workflows/deploy-app-workflow.yml
+    uses: ./.github/workflows/deploy-action.yml
     with:
       environment: production
       branch: 'refs/tags/${{needs.release.outputs.tag}}'
