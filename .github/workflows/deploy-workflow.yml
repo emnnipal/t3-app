@@ -38,8 +38,8 @@ jobs:
       - name: Run ESLint
         run: pnpm lint
 
-      - name: Run tests
-        run: pnpm test -- --changed ${{ github.ref }}
+      # - name: Run tests
+      #   run: pnpm test -- --changed ${{ github.ref }}
 
   deploy-to-dev:
     name: Deploy React App to Dev
