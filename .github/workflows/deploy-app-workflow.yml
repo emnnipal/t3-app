@@ -1,0 +1,60 @@
+name: 'Deploy React App Workflow'
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+    secrets:
+      app_env:
+        required: true
+      vercel_token:
+        required: true
+      org_id:
+        required: true
+      project_id:
+        required: true
+
+jobs:
+  deploy-react:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ inputs.environment }}
+    steps:
+      - name: Checkout ${{ inputs.branch }} branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 7.0.1
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.15.0
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Set node environment variables
+        run: echo ${{ secrets.app_env }} | openssl base64 -d -A -out .env
+
+      - name: Build React App
+        run: pnpm build
+
+      # TODO
+      # - uses: amondnet/vercel-action@v20 #deploy
+      #   with:
+      #     vercel-token: ${{ secrets.vercel_token }} # Required
+      #     github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+      #     vercel-args: '--prod' #Optional
+      #     vercel-org-id: ${{ secrets.org_id}} #Required
+      #     vercel-project-id: ${{ secrets.project_id}} #Required
+      # working-directory: ./src

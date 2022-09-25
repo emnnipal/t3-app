@@ -1,0 +1,25 @@
+name: 'Manual deploy'
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        type: choice
+        default: 'dev'
+        options:
+          - dev
+          - production
+
+jobs:
+  manual-deploy:
+    name: '${{ github.event.inputs.environment }}:${{ github.ref_name }}'
+    uses: ./.github/workflows/deploy-app-workflow.yml
+    with:
+      environment: ${{ github.event.inputs.environment }}
+      branch: ${{ github.ref }}
+    secrets:
+      app_env: ${{ secrets.APP_ENV }}
+      vercel_token: ${{ secrets.VERCEL_TOKEN }}
+      org_id: ${{ secrets.VERCEL_ORG_ID }}
+      project_id: ${{ secrets.VERCEL_PROJECT_ID }}
