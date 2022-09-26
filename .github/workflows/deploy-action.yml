@@ -58,12 +58,12 @@ jobs:
       - name: Echo pr number
         run: echo ${{ github.event.pull_request.number }}
 
-      - uses: amondnet/vercel-action@v20 #deploy
-        with:
-          vercel-token: ${{ secrets.vercel_token }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-          vercel-args: ${{ inputs.vercel_args }} #Optional
-          vercel-org-id: ${{ secrets.org_id}} #Required
-          vercel-project-id: ${{ secrets.project_id}} #Required
-          alias-domains: ${{ inputs.vercel_url }}
-          # working-directory: ./.next
+      # - uses: amondnet/vercel-action@v20 #deploy
+      #   with:
+      #     vercel-token: ${{ secrets.vercel_token }} # Required
+      #     github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+      #     vercel-args: ${{ inputs.vercel_args }} #Optional
+      #     vercel-org-id: ${{ secrets.org_id}} #Required
+      #     vercel-project-id: ${{ secrets.project_id}} #Required
+      #     alias-domains: ${{ inputs.vercel_url }}
+      # working-directory: ./.next
