@@ -49,6 +49,7 @@ jobs:
     with:
       environment: dev
       branch: develop
+      vercel-args: ''
     secrets:
       app_env: ${{ secrets.APP_ENV }}
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
@@ -98,6 +99,7 @@ jobs:
     with:
       environment: production
       branch: 'refs/tags/${{needs.release.outputs.tag}}'
+      vercel-args: '--prod'
     secrets:
       app_env: ${{ secrets.APP_ENV }}
       vercel_token: ${{ secrets.VERCEL_TOKEN }}

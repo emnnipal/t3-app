@@ -8,6 +8,9 @@ on:
       branch:
         required: true
         type: string
+      vercel_args:
+        required: false
+        type: string
     secrets:
       app_env:
         required: true
@@ -49,14 +52,17 @@ jobs:
       - name: Build App
         run: pnpm build
 
+      - name: Echo pr number
+        run: echo ${{ github.event.pull_request.number }}
+
       - uses: amondnet/vercel-action@v20 #deploy
         with:
           vercel-token: ${{ secrets.vercel_token }} # Required
           github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-          vercel-args: '--prod' #Optional
+          vercel-args: ${{ inputs.vercel_args }} #Optional
           vercel-org-id: ${{ secrets.org_id}} #Required
           vercel-project-id: ${{ secrets.project_id}} #Required
           alias-domains: | #Optional
             t3-stack-app.vercel.app
             preview-${{ github.event.pull_request.number }}-t3-stack-app.vercel.app
-          # working-directory: ./sub-directory
+          working-directory: ./.next
