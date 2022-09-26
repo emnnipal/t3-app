@@ -25,7 +25,7 @@ jobs:
       org_id: ${{ secrets.VERCEL_ORG_ID }}
       project_id: ${{ secrets.VERCEL_PROJECT_ID }}
       vercel_args: ''
-      vecel_url: develop-t3-stack-app.vercel.app
+      vercel_url: develop-t3-stack-app.vercel.app
 
   manual-deploy-prod:
     name: 'Deploy to Production'
@@ -40,4 +40,4 @@ jobs:
       org_id: ${{ secrets.VERCEL_ORG_ID }}
       project_id: ${{ secrets.VERCEL_PROJECT_ID }}
       vercel_args: ''
-      vecel_url: t3-stack-app.vercel.app
+      vercel_url: t3-stack-app.vercel.app
