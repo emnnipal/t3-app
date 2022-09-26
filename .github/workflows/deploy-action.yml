@@ -46,14 +46,11 @@ jobs:
       - name: Install Vercel CLI
         run: pnpm add vercel@latest
 
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.vercel_token }}
-
       - name: Set node environment variables
         run: echo ${{ secrets.app_env }} | openssl base64 -d -A -out .env
 
-      - name: Build App
-        run: pnpm build
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.vercel_token }}
 
       - uses: amondnet/vercel-action@v20 #deploy
         with:
