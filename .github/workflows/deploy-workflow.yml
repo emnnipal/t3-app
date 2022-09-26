@@ -50,6 +50,7 @@ jobs:
       environment: dev
       branch: develop
       vercel_args: ''
+      vecel_url: develop-t3-stack-app.vercel.app
     secrets:
       app_env: ${{ secrets.APP_ENV }}
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
@@ -100,6 +101,7 @@ jobs:
       environment: production
       branch: 'refs/tags/${{needs.release.outputs.tag}}'
       vercel_args: '--prod'
+      vecel_url: t3-stack-app.vercel.app
     secrets:
       app_env: ${{ secrets.APP_ENV }}
       vercel_token: ${{ secrets.VERCEL_TOKEN }}

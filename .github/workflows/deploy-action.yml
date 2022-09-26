@@ -11,6 +11,9 @@ on:
       vercel_args:
         required: false
         type: string
+      vercel_url:
+        required: true
+        type: string
     secrets:
       app_env:
         required: true
@@ -62,7 +65,5 @@ jobs:
           vercel-args: ${{ inputs.vercel_args }} #Optional
           vercel-org-id: ${{ secrets.org_id}} #Required
           vercel-project-id: ${{ secrets.project_id}} #Required
-          alias-domains: | #Optional
-            t3-stack-app.vercel.app
-            pr-{{PR_NUMBER}}.t3-stack-app.vercel.app
+          alias-domains: ${{ inputs.vercel_url }}
           # working-directory: ./.next
