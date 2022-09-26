@@ -52,21 +52,24 @@ jobs:
       - name: Install Vercel CLI
         run: pnpm add vercel@latest
 
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.vercel_token }}
+      - name: Build and deploy project to Vercel in Production
+        if: ${{ inputs.environment == 'production' }}
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.vercel_token }}
+          vercel build --prod --token=${{ secrets.vercel_token }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.vercel_token }}
 
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.vercel_token }}
+      - name: Build and deploy project to Vercel in Develop
+        if: ${{ inputs.environment == 'dev' }}
+        run: |
+          vercel pull --yes --token=${{ secrets.vercel_token }}
+          vercel build --token=${{ secrets.vercel_token }}
+          vercel deploy --prebuilt --token=${{ secrets.vercel_token }}
 
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.vercel_token }}
-
-      # - uses: amondnet/vercel-action@v20 #deploy
-      #   with:
-      #     vercel-token: ${{ secrets.vercel_token }} # Required
-      #     github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-      #     vercel-args: ${{ inputs.vercel_args }} #Optional
-      #     vercel-org-id: ${{ secrets.org_id}} #Required
-      #     vercel-project-id: ${{ secrets.project_id}} #Required
-      #     alias-domains: ${{ inputs.vercel_url }}
-      # working-directory: ./.next
+      - name: Build and deploy project to Vercel in Preview
+        if: |
+          inputs.environment != 'production' && inputs.environment != 'dev'
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.vercel_token }}
+          vercel build --token=${{ secrets.vercel_token }}
+          vercel deploy --prebuilt --token=${{ secrets.vercel_token }}

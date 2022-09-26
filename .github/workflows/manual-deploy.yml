@@ -14,7 +14,6 @@ on:
 jobs:
   manual-deploy:
     name: '${{ github.event.inputs.environment }}:${{ github.ref_name }}'
-    if: ${{ github.event.inputs.environment == 'dev' }}
     uses: ./.github/workflows/deploy-action.yml
     with:
       environment: ${{ github.event.inputs.environment }}
