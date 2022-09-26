@@ -59,7 +59,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.vercel_token }} # Required
           github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-          vercel-args: ${{ inputs.vercel_args }} #Optional
+          vercel_args: ${{ inputs.vercel_args }} #Optional
           vercel-org-id: ${{ secrets.org_id}} #Required
           vercel-project-id: ${{ secrets.project_id}} #Required
           alias-domains: | #Optional
