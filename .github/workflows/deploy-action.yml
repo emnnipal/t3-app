@@ -66,9 +66,8 @@ jobs:
             environment="--environment=preview"
           fi
 
-          echo environment $environment
-          echo prodRun $prodRun
-          echo testing (! ${{contains(inputs.branch, 'develop')}})
+          echo environment: $environment
+          echo prodRun: $prodRun
 
         # vercel pull --yes $environment --token=${{ secrets.vercel_token }}
         # vercel build $prodRun --token=${{ secrets.vercel_token }}
