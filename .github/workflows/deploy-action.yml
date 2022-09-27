@@ -56,15 +56,19 @@ jobs:
         run: |
           environment=""
           prodRun=""
-          if [[ "${{ inputs.environment }}" == "production" ]]; then
+
+          if [[ "${{ inputs.environment }}" == "production" ]]
+          then
             environment="--environment=production"
             prodRun="--prod"
+          elif [[ "${{!contains(inputs.branch, 'develop')}}" ]]
+          then
+            environment="--environment=preview"
           fi
-          [[ "${{ inputs.environment }}" != "production" && "${{!contains(inputs.branch, 'develop')}}" ]] && environment="--environment=preview"
 
           echo $environment
           echo $prodRun
-          echo testing "${{!contains(inputs.branch, 'develop')}}"
+          echo testing "${{contains(inputs.branch, 'develop')}}"
 
         # vercel pull --yes $environment --token=${{ secrets.vercel_token }}
         # vercel build $prodRun --token=${{ secrets.vercel_token }}
