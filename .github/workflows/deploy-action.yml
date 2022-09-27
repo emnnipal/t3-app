@@ -60,7 +60,7 @@ jobs:
             environment="--environment=production"
             prodRun="--prod"
           fi
-          [[ "${{ inputs.environment }}" != "production" && !contains(inputs.branch, "dev") ]] && environment="--environment=preview"
+          [[ "${{ inputs.environment }}" != "production" && "${{!contains(inputs.branch, 'dev')}}" ]] && environment="--environment=preview"
 
           echo $environment
           echo $prodRun
