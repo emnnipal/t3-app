@@ -50,7 +50,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Vercel CLI
-        run: pnpm add vercel@latest
+        run: pnpm add -g vercel@latest
 
       - name: Build and deploy project to Vercel
         run: |
@@ -61,13 +61,13 @@ jobs:
           then
             environment="--environment=production"
             prodRun="--prod"
-          elif [[ "!${{contains(inputs.branch, 'develop')}}" ]]
+          elif [[ !"${{contains(inputs.branch, 'develop')}}" ]]
           then
             environment="--environment=preview"
           fi
 
-          echo $environment
-          echo $prodRun
+          echo environment $environment
+          echo prodRun $prodRun
           echo testing "${{contains(inputs.branch, 'develop')}}"
 
         # vercel pull --yes $environment --token=${{ secrets.vercel_token }}
