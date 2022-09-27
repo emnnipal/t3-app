@@ -52,19 +52,58 @@ jobs:
       - name: Install Vercel CLI
         run: pnpm add vercel@latest
 
-      - name: Build and deploy project to Vercel
+      - name: Vercel Build
         run: |
           environment=""
           prodRun=""
-          if [[ "${{ inputs.environment }}" == "production" ]]; then
+
+          if [[ "${{ inputs.environment }}" == "production" ]]
+          then
             environment="--environment=production"
             prodRun="--prod"
+          elif [[ "${{contains(inputs.branch, 'develop')}}" == "false" ]]
+          then
+            environment="--environment=preview"
           fi
-          [[ "${{ inputs.environment }}" != "production" && "${{!contains(inputs.branch, 'dev')}}" ]] && environment="--environment=preview"
 
-          echo $environment
-          echo $prodRun
+          echo environment: $environment
+          echo prodRun: $prodRun
 
           vercel pull --yes $environment --token=${{ secrets.vercel_token }}
           vercel build $prodRun --token=${{ secrets.vercel_token }}
-          vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }} -m githubCommitRef=${{ inputs.branch }}
+        # vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }}
+
+      - uses: amondnet/vercel-action@v20 #deploy
+        name: Deploy to Vercel Preview
+        if: contains(inputs.branch, 'develop') == false && inputs.environment == 'dev'
+        with:
+          vercel-token: ${{ secrets.vercel_token }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: 'deploy --prebuilt'
+          vercel-org-id: ${{ secrets.org_id}} #Required
+          vercel-project-id: ${{ secrets.project_id}} #Required
+          working-directory: ./
+
+      - uses: amondnet/vercel-action@v20 #deploy
+        name: Deploy to Vercel Develop
+        if: contains(inputs.branch, 'develop')
+        with:
+          vercel-token: ${{ secrets.vercel_token }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: 'deploy --prebuilt'
+          vercel-org-id: ${{ secrets.org_id}} #Required
+          vercel-project-id: ${{ secrets.project_id}} #Required
+          working-directory: ./
+          alias-domains: | #Optional
+            develop-t3-stack-app.vercel.app
+
+      - uses: amondnet/vercel-action@v20 #deploy
+        name: Deploy to Vercel Production
+        if: inputs.environment == 'production'
+        with:
+          vercel-token: ${{ secrets.vercel_token }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: 'deploy --prebuilt --prod '
+          vercel-org-id: ${{ secrets.org_id}} #Required
+          vercel-project-id: ${{ secrets.project_id}} #Required
+          working-directory: ./

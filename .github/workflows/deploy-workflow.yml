@@ -48,7 +48,7 @@ jobs:
     uses: ./.github/workflows/deploy-action.yml
     with:
       environment: dev
-      branch: develop
+      branch: ${{ github.ref }}
     secrets:
       app_env: ${{ secrets.APP_ENV }}
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
