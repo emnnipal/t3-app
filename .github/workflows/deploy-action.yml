@@ -61,7 +61,7 @@ jobs:
           then
             environment="--environment=production"
             prodRun="--prod"
-          elif [[ "${{!contains(inputs.branch, 'develop')}}" ]]
+          elif [[ "!${{contains(inputs.branch, 'develop')}}" ]]
           then
             environment="--environment=preview"
           fi
