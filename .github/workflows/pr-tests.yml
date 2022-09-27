@@ -54,12 +54,6 @@ jobs:
       - name: Check Types
         run: pnpm check:types
 
-      # TODO: remove
-      - name: echo base ref
-        run: |
-          echo base ref ${{ github.event.pull_request.base.ref }}
-          echo condition ${{ github.event.pull_request.base.ref == 'develop' }}
-
   deploy-preview:
     name: Create Deploy Preview
     if: github.event.pull_request.base.ref == 'develop'
