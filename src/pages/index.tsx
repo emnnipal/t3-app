@@ -27,7 +27,8 @@ const TechnologyCard = ({ name, description, documentation }: TechnologyCardProp
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
-
+  // eslint-disable-next-line no-console
+  console.log('process.env', process.env);
   return (
     <>
       <Head>
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
         <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
           Create <span className="text-purple-300">T3</span>
         </h1>
-        <span>v0.4.2</span>
+        <span>v0.4.3</span>
         <p className="text-2xl text-gray-700">This stack uses:</p>
         <div className="mt-3 grid gap-3 pt-3 text-center md:grid-cols-2 lg:w-2/3">
           <TechnologyCard
