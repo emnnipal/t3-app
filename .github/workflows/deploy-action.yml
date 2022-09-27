@@ -59,7 +59,7 @@ jobs:
           if [[ "${{ inputs.environment }}" == "production" ]]; then
             environment="--environment=production"
             prodRun="--prod"
-          if
+          fi
           [[ "${{ inputs.environment }}" != "production" && !contains("${{ inputs.branch }}", "dev") ]] && environment="--environment=preview"
 
           echo contains("${{ inputs.branch }}", "dev")
