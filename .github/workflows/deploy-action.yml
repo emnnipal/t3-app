@@ -82,5 +82,5 @@ jobs:
           vercel-project-id: ${{ secrets.project_id}} #Required
           alias-domains: | #Optional
             develop-t3-stack-app.vercel.app
-          # pr-{{PR_NUMBER}}-t3-stack-app.vercel.app
+            pr-{{PR_NUMBER}}-t3-stack-app.vercel.app
           # working-directory: ./sub-directory
