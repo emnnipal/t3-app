@@ -54,7 +54,7 @@ jobs:
       - name: Check Types
         run: pnpm check:types
 
-  deploy-to-dev:
+  deploy-preview:
     name: Create Deploy Preview
     if: ${{ github.event.pull_request.base.ref }} == 'develop'
     needs: [pr-lint-and-test, pr-check-types]
