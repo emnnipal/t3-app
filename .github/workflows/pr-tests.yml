@@ -53,3 +53,17 @@ jobs:
 
       - name: Check Types
         run: pnpm check:types
+
+  deploy-to-dev:
+    name: Create Deploy Preview
+    if: ${{ github.event.pull_request.base.ref }} == 'develop'
+    needs: [pr-lint-and-test, pr-check-types]
+    uses: ./.github/workflows/deploy-action.yml
+    with:
+      environment: dev
+      branch: ${{ github.ref }}
+    secrets:
+      app_env: ${{ secrets.APP_ENV }}
+      vercel_token: ${{ secrets.VERCEL_TOKEN }}
+      org_id: ${{ secrets.VERCEL_ORG_ID }}
+      project_id: ${{ secrets.VERCEL_PROJECT_ID }}
