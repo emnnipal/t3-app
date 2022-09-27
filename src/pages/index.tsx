@@ -27,8 +27,7 @@ const TechnologyCard = ({ name, description, documentation }: TechnologyCardProp
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
-  // eslint-disable-next-line no-console
-  console.log('process.env', process.env);
+
   return (
     <>
       <Head>
