@@ -52,24 +52,19 @@ jobs:
       - name: Install Vercel CLI
         run: pnpm add vercel@latest
 
-      - name: Build and deploy project to Vercel in Production
-        if: ${{ inputs.environment == 'production' }}
+      - name: Build and deploy project to Vercel
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.vercel_token }}
-          vercel build --prod --token=${{ secrets.vercel_token }}
-          vercel deploy --prebuilt --prod --token=${{ secrets.vercel_token }}
+          environment=""
+          prodRun=""
+          if [[ "${{ inputs.environment }}" == "production" ]]; then
+            environment="--environment=production"
+            prodRun="--prod"
+          fi
+          [[ "${{ inputs.environment }}" != "production" && "${{!contains(inputs.branch, 'dev')}}" ]] && environment="--environment=preview"
 
-      - name: Build and deploy project to Vercel in Develop
-        if: ${{ inputs.environment == 'dev' }}
-        run: |
-          vercel pull --yes --token=${{ secrets.vercel_token }}
-          vercel build --token=${{ secrets.vercel_token }}
-          vercel deploy --prebuilt --token=${{ secrets.vercel_token }}
+          echo $environment
+          echo $prodRun
 
-      - name: Build and deploy project to Vercel in Preview
-        if: |
-          inputs.environment != 'production' && inputs.environment != 'dev'
-        run: |
-          vercel pull --yes --environment=preview --token=${{ secrets.vercel_token }}
-          vercel build --token=${{ secrets.vercel_token }}
-          vercel deploy --prebuilt --token=${{ secrets.vercel_token }}
+          vercel pull --yes $environment --token=${{ secrets.vercel_token }}
+          vercel build $prodRun --token=${{ secrets.vercel_token }}
+          vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }} -m githubCommitRef=${{ inputs.branch }}
