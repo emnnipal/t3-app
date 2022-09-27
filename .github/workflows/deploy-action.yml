@@ -66,6 +66,6 @@ jobs:
           echo $prodRun
           echo testing "${{!contains(inputs.branch, 'develop')}}"
 
-          vercel pull --yes $environment --token=${{ secrets.vercel_token }}
-          vercel build $prodRun --token=${{ secrets.vercel_token }}
-          vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }} -m githubCommitRef=${{ inputs.branch }}
+        # vercel pull --yes $environment --token=${{ secrets.vercel_token }}
+        # vercel build $prodRun --token=${{ secrets.vercel_token }}
+        # vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }} -m githubCommitRef=${{ inputs.branch }}
