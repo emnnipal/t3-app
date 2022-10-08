@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment }}
-      url: ${{ steps.vercel_deploy.outputs.preview-url }}
+      url: ${{ steps.get_url.outputs.vercel_url }}
     concurrency:
       cancel-in-progress: true
       group: ${{ inputs.environment }}
@@ -86,3 +86,21 @@ jobs:
           vercel-project-id: ${{ secrets.project_id}}
           working-directory: ./
           alias-domains: "${{ contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' || '' }}"
+
+      - name: Set Vercel Deployment URL
+        id: get_url
+        run: |
+          vercel_url=""
+          if [[ "${{ contains(inputs.branch, 'develop') }}" == false && "${{ inputs.environment }}" == 'dev'  ]]
+          then
+            vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
+          elif [[ "${{ contains(inputs.branch, 'develop') }}" == true ]]
+          then
+            vercel_url="https://develop-t3-stack-app.vercel.app"
+          elif [[ "${{ inputs.environment }}" == 'dev' == 'production' ]]
+          then
+            vercel_url="https://t3-stack-app.vercel.app"
+          fi
+
+          echo vercel url: $vercel_url
+          echo "::set-output name=vercel_url::${vercel_url}"
