@@ -85,6 +85,7 @@ jobs:
           vercel-org-id: ${{ secrets.org_id}}
           vercel-project-id: ${{ secrets.project_id}}
           working-directory: ./
+          # set develop vercel url alias in develop branch only
           alias-domains: "${{ contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' || '' }}"
 
       - name: Set Vercel Deployment URL
@@ -97,12 +98,7 @@ jobs:
           then
             vercel_url="https://t3-stack-app.vercel.app"
 
-          # deploy to dev
-          elif [[ "${{ contains(inputs.branch, 'develop') }}" == "true" && "${{ inputs.environment }}" == 'dev'  ]]
-          then
-            vercel_url="https://develop-t3-stack-app.vercel.app"
-
-          # deploy as preview
+          # deploy as preview or dev
           else
             vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
           fi
