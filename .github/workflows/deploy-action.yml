@@ -23,8 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment }}
-      # TODO set deployment url
-      # url:
+      url: ${{ steps.get_url.outputs.vercel_url }}
     concurrency:
       cancel-in-progress: true
       group: ${{ inputs.environment }}
@@ -77,44 +76,36 @@ jobs:
         # vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }}
 
       - uses: amondnet/vercel-action@v20
-        name: Deploy to Vercel Preview
-        id: vercel_preview
-        if: contains(inputs.branch, 'develop') == false && inputs.environment == 'dev'
+        name: Deploy to Vercel
+        id: vercel_deploy
         with:
           vercel-token: ${{ secrets.vercel_token }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: 'deploy --prebuilt'
+          vercel-args: "deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }}"
           vercel-org-id: ${{ secrets.org_id}}
           vercel-project-id: ${{ secrets.project_id}}
           working-directory: ./
+          alias-domains: "${{ contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' || '' }}"
 
-      - uses: amondnet/vercel-action@v20
-        name: Deploy to Vercel Develop
-        id: vercel_develop
-        if: contains(inputs.branch, 'develop')
-        with:
-          vercel-token: ${{ secrets.vercel_token }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: 'deploy --prebuilt'
-          vercel-org-id: ${{ secrets.org_id}}
-          vercel-project-id: ${{ secrets.project_id}}
-          working-directory: ./
-          alias-domains: |
-            develop-t3-stack-app.vercel.app
+      - name: Set Vercel Deployment URL
+        id: get_url
+        run: |
+          vercel_url=""
 
-      - uses: amondnet/vercel-action@v20
-        name: Deploy to Vercel Production
-        id: vercel_production
-        if: inputs.environment == 'production'
-        with:
-          vercel-token: ${{ secrets.vercel_token }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: 'deploy --prebuilt --prod '
-          vercel-org-id: ${{ secrets.org_id}}
-          vercel-project-id: ${{ secrets.project_id}}
-          working-directory: ./
+          # deploy to production
+          if [[ "${{ inputs.environment }}" == 'production' ]]
+          then
+            vercel_url="https://t3-stack-app.vercel.app"
 
-      # - name: Set Vercel Deployment URL
-      #   run: |
-      #     url=""
-      #     echo "::set-output name=vercel_url::http://$(pulumi stack output bucketUrl)"
+          # deploy to dev
+          elif [[ "${{ contains(inputs.branch, 'develop') }}" == "true" && "${{ inputs.environment }}" == 'dev'  ]]
+          then
+            vercel_url="https://develop-t3-stack-app.vercel.app"
+
+          # deploy as preview
+          else
+            vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
+          fi
+
+          echo vercel url: $vercel_url
+          echo "::set-output name=vercel_url::${vercel_url}"
