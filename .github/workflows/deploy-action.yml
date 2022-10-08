@@ -89,7 +89,7 @@ jobs:
           alias-domains: |
             ${{
               contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' ||
-              contains(inputs.branch, 'staging') && 'staging-t3-stack-app.vercel.app'
+              contains(inputs.branch, 'staging') && 'staging-t3-stack-app.vercel.app' || ''
             }}
 
       - name: Set Vercel Deployment URL
