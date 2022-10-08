@@ -91,15 +91,20 @@ jobs:
         id: get_url
         run: |
           vercel_url=""
-          if [[ "${{ contains(inputs.branch, 'develop') }}" == false && "${{ inputs.environment }}" == 'dev'  ]]
-          then
-            vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
-          elif [[ "${{ contains(inputs.branch, 'develop') }}" == true ]]
-          then
-            vercel_url="https://develop-t3-stack-app.vercel.app"
-          elif [[ "${{ inputs.environment }}" == 'dev' == 'production' ]]
+
+          # deploy to production
+          if [[ "${{ inputs.environment }}" == 'production' ]]
           then
             vercel_url="https://t3-stack-app.vercel.app"
+
+          # deploy to dev
+          elif [[ "${{ contains(inputs.branch, 'develop') }}" == "true" && "${{ inputs.environment }}" == 'dev'  ]]
+          then
+            vercel_url="https://develop-t3-stack-app.vercel.app"
+
+          # deploy as preview
+          else
+            vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
           fi
 
           echo vercel url: $vercel_url
