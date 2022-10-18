@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment }}
-      url: ${{ steps.get_url.outputs.vercel_url }}
+      url: ${{ steps.get_url.outputs.VERCEL_URL }}
     concurrency:
       cancel-in-progress: true
       group: ${{ inputs.environment }}
@@ -108,4 +108,4 @@ jobs:
           fi
 
           echo vercel url: $vercel_url
-          echo "::set-output name=vercel_url::${vercel_url}"
+          echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
