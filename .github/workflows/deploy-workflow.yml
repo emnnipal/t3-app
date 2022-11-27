@@ -32,11 +32,8 @@ jobs:
       - name: Set environment variables
         run: echo ${{ secrets.TEST_APP_ENV }} | openssl base64 -d -A -out .env
 
-      - name: Check Types
-        run: pnpm check:types
-
-      - name: Run ESLint
-        run: pnpm lint
+      - name: Run lint and type checks
+        run: pnpm lint & pnpm check:types & wait
 
       # - name: Run tests
       #   run: pnpm test -- --changed ${{ github.ref }}
