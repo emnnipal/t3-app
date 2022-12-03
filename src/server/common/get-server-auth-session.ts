@@ -1,13 +1,13 @@
-// Wrapper for unstable_getServerSession https://next-auth.js.org/configuration/nextjs
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
 
-import { authOptions as nextAuthOptions } from '../../pages/api/auth/[...nextauth]';
-
+import { type GetServerSidePropsContext } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 
-import type { GetServerSidePropsContext } from 'next';
-
-// Next API route example - /pages/api/restricted.ts
+/**
+ * Wrapper for unstable_getServerSession https://next-auth.js.org/configuration/nextjs
+ * See example usage in trpc createContext or the restricted API route
+ */
 export const getServerAuthSession = async (ctx: {
   req: GetServerSidePropsContext['req'];
   res: GetServerSidePropsContext['res'];
-}) => unstable_getServerSession(ctx.req, ctx.res, nextAuthOptions);
+}) => unstable_getServerSession(ctx.req, ctx.res, authOptions);

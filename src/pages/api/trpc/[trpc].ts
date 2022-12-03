@@ -1,8 +1,8 @@
 /* eslint-disable import/extensions */
-// src/pages/api/trpc/[trpc].ts
+
 import { env } from '../../../env/server.mjs';
-import { appRouter } from '../../../server/router';
-import { createContext } from '../../../server/router/context';
+import { createContext } from '../../../server/trpc/context';
+import { appRouter } from '../../../server/trpc/router/_app';
 
 import { createNextApiHandler } from '@trpc/server/adapters/next';
 

@@ -1,12 +1,10 @@
 /* eslint-disable import/extensions */
-/* eslint-disable vars-on-top */
-// src/server/db/client.ts
 import { env } from '../../env/server.mjs';
 
 import { PrismaClient } from '@prisma/client';
 
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, vars-on-top
   var prisma: PrismaClient | undefined;
 }
 
