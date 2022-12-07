@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
-    "check:types": "tsc --noEmit",
+    "check:types": "tsc --noEmit -p tsconfig.eslint.json",
     "postinstall": "prisma generate",
     "prepare": "husky install"
   },
