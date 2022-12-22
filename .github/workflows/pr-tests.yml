@@ -27,10 +27,10 @@ jobs:
         run: echo ${{ secrets.TEST_APP_ENV }} | openssl base64 -d -A -out .env
 
       - name: Run lint and type checks
-        run: pnpm lint & pnpm check:types & wait -n
-
-      # - name: Run tests
-      #   run: pnpm test
+        run: |
+          pnpm concurrently -g \
+          "pnpm lint" \
+          "pnpm check:types"
 
   pr-deploy-preview:
     if: github.event.pull_request.base.ref == 'develop'
