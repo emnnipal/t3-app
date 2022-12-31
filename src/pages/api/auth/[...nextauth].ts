@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { env } from '../../../env/server.mjs';
 import { prisma } from '../../../server/db/client';
 

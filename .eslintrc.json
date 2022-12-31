@@ -46,6 +46,13 @@
         }
       }
     ],
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        "mjs": "ignorePackages"
+      }
+    ],
     "react-hooks/exhaustive-deps": [
       "error",
       { "enableDangerousAutofixThisMayCauseInfiniteLoops": true }

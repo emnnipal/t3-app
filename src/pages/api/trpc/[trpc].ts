@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { env } from '../../../env/server.mjs';
 import { createContext } from '../../../server/trpc/context';
 import { appRouter } from '../../../server/trpc/router/_app';
