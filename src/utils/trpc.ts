@@ -1,5 +1,6 @@
 import { type AppRouter } from '../server/trpc/router/_app';
 
+import { QueryClient } from '@tanstack/react-query';
 import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
@@ -25,6 +26,13 @@ export const trpc = createTRPCNext<AppRouter>({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+      queryClient: new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 5,
+          },
+        },
+      }),
     };
   },
   ssr: false,
