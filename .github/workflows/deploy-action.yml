@@ -78,6 +78,9 @@ jobs:
           then
             vercel_url="develop-${{ github.event.pull_request.number }}-$VERCEL_DOMAIN"
             environment="--environment=preview"
+
+            # set PR deploy preview url
+            echo "PR_PREVIEW_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
           fi
 
           # show derived parameters
@@ -85,9 +88,11 @@ jobs:
           echo prod_flag: $prod_flag
           echo vercel_url: $vercel_url
 
+          # start vercel deployment
+
           pnpm vercel --token=${{ secrets.vercel_token }} pull --yes $environment
 
-          # upon project setup, override the following
+          # on project setup, override the following
           # - build command in vercel with `next build --no-lint` to disable linting
           # - install command as empty to disable installation in vercel build command
           pnpm vercel --token=${{ secrets.vercel_token }} build $prod_flag
@@ -100,8 +105,12 @@ jobs:
             pnpm vercel --token=${{ secrets.vercel_token }} alias set `cat domain.txt` $vercel_url
           fi
 
-          # set deployed vercel url as job output url
-          echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
+          # set vercel preview url as job output url
+          if [[ "${{ github.event_name }}" != "pull_request" ]]
+          then
+            echo Set Environment URL
+            echo "VERCEL_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Comment deploy preview URL
         uses: thollander/actions-comment-pull-request@v2
@@ -111,47 +120,9 @@ jobs:
         with:
           message: |
             :white_check_mark: Preview
-            ${{ steps.vercel_deploy.outputs.VERCEL_URL }}
+            ${{ steps.vercel_deploy.outputs.PR_PREVIEW_URL }}
 
             Built with commit ${{ github.event.pull_request.head.sha }}.
           comment_tag: execution
           pr_number: ${{ github.event.pull_request.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - uses: amondnet/vercel-action@v20
-      #   name: Deploy to Vercel
-      #   id: vercel_deploy
-      #   with:
-      #     vercel-token: ${{ secrets.vercel_token }}
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     vercel-args: "pnpm deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }}"
-      #     vercel-org-id: ${{ secrets.org_id }}
-      #     vercel-project-id: ${{ secrets.project_id }}
-      #     working-directory: ./
-      #     # set develop or staging url alias
-      #     alias-domains: |
-      #       ${{
-      #         contains(inputs.branch, 'develop') && 'develop-$VERCEL_DOMAIN' ||
-      #         contains(inputs.branch, 'staging') && 'staging-$VERCEL_DOMAIN' || ''
-      #       }}
-
-      # - name: Set Vercel Deployment URL
-      #   id: get_url
-      #   run: |
-      #     vercel_url=""
-
-      #     # deploy to production
-      #     if [[ "${{ inputs.environment }}" == 'production' ]]
-      #     then
-      #       vercel_url="https://$VERCEL_DOMAIN"
-
-      #     # deploy as preview or dev
-      #     else
-      #       vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
-      #     fi
-
-      #     # show derived vercel url
-      #     echo vercel url: $vercel_url
-
-      #     # set deployed vercel url as job output url
-      #     echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
