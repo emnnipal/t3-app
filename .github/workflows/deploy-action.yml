@@ -52,10 +52,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # TODO: move vercel package to devDependencies
-      - name: Install Vercel CLI
-        run: pnpm add vercel@latest
-
       - name: Vercel Build
         run: |
           environment=""
@@ -74,13 +70,13 @@ jobs:
           echo environment: $environment
           echo prodFlag: $prodFlag
 
-          vercel pull --yes $environment --token=${{ secrets.vercel_token }}
+          pnpm vercel pull --yes $environment --token=${{ secrets.vercel_token }}
 
           # upon project setup, override build command in vercel with `next build --no-lint` to disable linting
           # next, override install command as empty to disable installation in vercel build command
           vercel build $prodFlag --token=${{ secrets.vercel_token }}
 
-        # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
+        # pnpm vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
 
         # use --scope=$VERCEL_TEAM_ID if you're using vercel teams
         # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-$VERCEL_DOMAIN
@@ -91,7 +87,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.vercel_token }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: "deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }}"
+          vercel-args: "pnpm deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }}"
           vercel-org-id: ${{ secrets.org_id }}
           vercel-project-id: ${{ secrets.project_id }}
           working-directory: ./
