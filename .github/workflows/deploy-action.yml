@@ -62,13 +62,13 @@ jobs:
           # set vercel_url based on environment
           if [[ "${{ inputs.environment }}" == "dev" ]]
           then
-            vercel_url="https://develop-$VERCEL_DOMAIN"
+            vercel_url="develop-$VERCEL_DOMAIN"
           elif [[ "${{ inputs.environment }}" == "staging" ]]
           then
-            vercel_url="https://staging-$VERCEL_DOMAIN"
+            vercel_url="staging-$VERCEL_DOMAIN"
           elif [[ "${{ inputs.environment }}" == "production" ]]
           then
-            vercel_url="https://$VERCEL_DOMAIN"
+            vercel_url="$VERCEL_DOMAIN"
             environment="--environment=production"
             prod_flag="--prod"
           fi
@@ -76,7 +76,7 @@ jobs:
           # pull request deploy preview
           if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.base_ref }}" == "develop" ]]
           then
-            vercel_url="https://develop-${{ github.event.pull_request.number }}-$VERCEL_DOMAIN"
+            vercel_url="develop-${{ github.event.pull_request.number }}-$VERCEL_DOMAIN"
             environment="--environment=preview"
           fi
 
@@ -84,9 +84,6 @@ jobs:
           echo environment: $environment
           echo prod_flag: $prod_flag
           echo vercel_url: $vercel_url
-
-          # set deployed vercel url as job output url
-          echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
 
           pnpm vercel --token=${{ secrets.vercel_token }} pull --yes $environment
 
@@ -102,6 +99,9 @@ jobs:
           then
             pnpm vercel --token=${{ secrets.vercel_token }} alias set `cat domain.txt` $vercel_url
           fi
+
+          # set deployed vercel url as job output url
+          echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
 
       - name: Comment deploy preview URL
         uses: thollander/actions-comment-pull-request@v2
