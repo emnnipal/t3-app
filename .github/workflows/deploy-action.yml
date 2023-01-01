@@ -17,8 +17,6 @@ on:
         required: true
       project_id:
         required: true
-      domain:
-        required: true
 
 jobs:
   deploy-app:
@@ -84,7 +82,7 @@ jobs:
         # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
 
         # use --scope=$VERCEL_TEAM_ID if you're using vercel teams
-        # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-$DOMAIN
+        # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-t3-stack-app.vercel.app
 
       - uses: amondnet/vercel-action@v20
         name: Deploy to Vercel
@@ -99,24 +97,19 @@ jobs:
           # set develop or staging url alias
           alias-domains: |
             ${{
-              contains(inputs.branch, 'develop') && 'develop-$DOMAIN' ||
-              contains(inputs.branch, 'staging') && 'staging-$DOMAIN' || ''
+              contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' ||
+              contains(inputs.branch, 'staging') && 'staging-t3-stack-app.vercel.app' || ''
             }}
 
       - name: Set Vercel Deployment URL
         id: get_url
-        env:
-          DOMAIN: ${{ secrets.DOMAIN }}
         run: |
-          echo domain ${{ secrets.DOMAIN }}
-          echo domain2 $DOMAIN
-
           vercel_url=""
 
           # deploy to production
           if [[ "${{ inputs.environment }}" == 'production' ]]
           then
-            vercel_url="https://$DOMAIN"
+            vercel_url="https://t3-stack-app.vercel.app"
 
           # deploy as preview or dev
           else
