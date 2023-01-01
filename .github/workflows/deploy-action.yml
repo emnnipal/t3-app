@@ -18,9 +18,6 @@ on:
       project_id:
         required: true
 
-env:
-  DOMAIN: ${{ secrets.DOMAIN }}
-
 jobs:
   deploy-app:
     runs-on: ubuntu-latest
@@ -106,7 +103,12 @@ jobs:
 
       - name: Set Vercel Deployment URL
         id: get_url
+        env:
+          DOMAIN: ${{ secrets.DOMAIN }}
         run: |
+          echo domain ${{ secrets.DOMAIN }}
+          echo domain2 $DOMAIN
+
           vercel_url=""
 
           # deploy to production
