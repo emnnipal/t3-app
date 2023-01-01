@@ -18,6 +18,9 @@ on:
       project_id:
         required: true
 
+env:
+  DOMAIN: ${{ secrets.DOMAIN }}
+
 jobs:
   deploy-app:
     runs-on: ubuntu-latest
@@ -82,7 +85,7 @@ jobs:
         # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
 
         # use --scope=$VERCEL_TEAM_ID if you're using vercel teams
-        # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-$VERCEL_DOMAIN
+        # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-$DOMAIN
 
       - uses: amondnet/vercel-action@v20
         name: Deploy to Vercel
@@ -97,8 +100,8 @@ jobs:
           # set develop or staging url alias
           alias-domains: |
             ${{
-              contains(inputs.branch, 'develop') && 'develop-$VERCEL_DOMAIN' ||
-              contains(inputs.branch, 'staging') && 'staging-$VERCEL_DOMAIN' || ''
+              contains(inputs.branch, 'develop') && 'develop-$DOMAIN' ||
+              contains(inputs.branch, 'staging') && 'staging-$DOMAIN' || ''
             }}
 
       - name: Set Vercel Deployment URL
@@ -109,7 +112,7 @@ jobs:
           # deploy to production
           if [[ "${{ inputs.environment }}" == 'production' ]]
           then
-            vercel_url="https://$VERCEL_DOMAIN"
+            vercel_url="https://$DOMAIN"
 
           # deploy as preview or dev
           else
