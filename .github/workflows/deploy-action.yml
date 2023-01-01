@@ -51,6 +51,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # TODO: move vercel package to devDependencies
       - name: Install Vercel CLI
         run: pnpm add vercel@latest
 
@@ -77,7 +78,11 @@ jobs:
           # upon project setup, override build command in vercel with `next build --no-lint` to disable linting
           # next, override install command as empty to disable installation in vercel build command
           vercel build $prodFlag --token=${{ secrets.vercel_token }}
+
         # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
+
+        # use --scope=$VERCEL_TEAM_ID if you're using vercel teams
+        # pnpm vercel --token=${{ secrets.vercel_token }} --scope=$VERCEL_TEAM_ID alias set `cat domain.txt` staging-$VERCEL_DOMAIN
 
       - uses: amondnet/vercel-action@v20
         name: Deploy to Vercel
@@ -86,14 +91,14 @@ jobs:
           vercel-token: ${{ secrets.vercel_token }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-args: "deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }}"
-          vercel-org-id: ${{ secrets.org_id}}
-          vercel-project-id: ${{ secrets.project_id}}
+          vercel-org-id: ${{ secrets.org_id }}
+          vercel-project-id: ${{ secrets.project_id }}
           working-directory: ./
           # set develop or staging url alias
           alias-domains: |
             ${{
-              contains(inputs.branch, 'develop') && 'develop-t3-stack-app.vercel.app' ||
-              contains(inputs.branch, 'staging') && 'staging-t3-stack-app.vercel.app' || ''
+              contains(inputs.branch, 'develop') && 'develop-$VERCEL_DOMAIN' ||
+              contains(inputs.branch, 'staging') && 'staging-$VERCEL_DOMAIN' || ''
             }}
 
       - name: Set Vercel Deployment URL
@@ -104,7 +109,7 @@ jobs:
           # deploy to production
           if [[ "${{ inputs.environment }}" == 'production' ]]
           then
-            vercel_url="https://t3-stack-app.vercel.app"
+            vercel_url="https://$VERCEL_DOMAIN"
 
           # deploy as preview or dev
           else
