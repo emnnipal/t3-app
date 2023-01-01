@@ -51,6 +51,7 @@ jobs:
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
       org_id: ${{ secrets.VERCEL_ORG_ID }}
       project_id: ${{ secrets.VERCEL_PROJECT_ID }}
+      domain: ${{ secrets.VERCEL_DOMAIN }}
 
   release:
     name: Release
@@ -100,3 +101,4 @@ jobs:
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
       org_id: ${{ secrets.VERCEL_ORG_ID }}
       project_id: ${{ secrets.VERCEL_PROJECT_ID }}
+      domain: ${{ secrets.VERCEL_DOMAIN }}

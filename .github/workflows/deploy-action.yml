@@ -17,6 +17,8 @@ on:
         required: true
       project_id:
         required: true
+      domain:
+        required: true
 
 jobs:
   deploy-app:
