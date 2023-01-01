@@ -104,12 +104,8 @@ jobs:
       - name: Set Vercel Deployment URL
         id: get_url
         env:
-          org_id: ${{ secrets.org_id }}
+          org_id: yeahh
         run: |
-          echo domain ${{ secrets.VERCEL_DOMAIN }}
-          echo domain2 $VERCEL_DOMAIN
-
-          echo orgId ${{ secrets.org_id }}
           echo orgId2 $org_id
 
           vercel_url=""
