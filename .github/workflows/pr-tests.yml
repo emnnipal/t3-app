@@ -34,7 +34,7 @@ jobs:
 
   pr-deploy-preview:
     if: github.event.pull_request.base.ref == 'develop'
-    needs: [pr-lint-and-test, pr-check-types]
+    needs: [pr-lint-and-test]
     uses: ./.github/workflows/deploy-action.yml
     with:
       environment: dev
