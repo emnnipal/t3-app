@@ -101,7 +101,7 @@ jobs:
           fi
 
           # set deployed vercel url as job output url
-          echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
+          echo "VERCEL_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
 
       - name: Comment deploy preview URL
         uses: thollander/actions-comment-pull-request@v2
