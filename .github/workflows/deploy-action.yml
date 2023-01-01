@@ -84,11 +84,12 @@ jobs:
           echo environment: $environment
           echo prod_flag: $prod_flag
           echo vercel_url: $vercel_url
-          echo \n
+
+          # start vercel deployment
 
           pnpm vercel --token=${{ secrets.vercel_token }} pull --yes $environment
 
-          # upon project setup, override the following
+          # on project setup, override the following
           # - build command in vercel with `next build --no-lint` to disable linting
           # - install command as empty to disable installation in vercel build command
           pnpm vercel --token=${{ secrets.vercel_token }} build $prod_flag
