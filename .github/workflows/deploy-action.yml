@@ -57,23 +57,24 @@ jobs:
       - name: Vercel Build
         run: |
           environment=""
-          prodRun=""
+          prodFlag=""
 
           if [[ "${{ inputs.environment }}" == "production" ]]
           then
             environment="--environment=production"
-            prodRun="--prod"
+            prodFlag="--prod"
           elif [[ "${{ contains(inputs.branch, 'develop') }}" == "false" ]]
           then
             environment="--environment=preview"
           fi
 
+          # show derived parameters
           echo environment: $environment
-          echo prodRun: $prodRun
+          echo prodFlag: $prodFlag
 
           vercel pull --yes $environment --token=${{ secrets.vercel_token }}
-          vercel build $prodRun --token=${{ secrets.vercel_token }}
-        # vercel deploy --prebuilt $prodRun --token=${{ secrets.vercel_token }}
+          vercel build $prodFlag --token=${{ secrets.vercel_token }}
+        # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
 
       - uses: amondnet/vercel-action@v20
         name: Deploy to Vercel
@@ -107,5 +108,8 @@ jobs:
             vercel_url="${{ steps.vercel_deploy.outputs.preview-url }}"
           fi
 
+          # show derived vercel url
           echo vercel url: $vercel_url
+
+          # set deployed vercel url as job output url
           echo "VERCEL_URL=${vercel_url}" >> $GITHUB_OUTPUT
