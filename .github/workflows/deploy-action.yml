@@ -78,6 +78,9 @@ jobs:
           then
             vercel_url="develop-${{ github.event.pull_request.number }}-$VERCEL_DOMAIN"
             environment="--environment=preview"
+
+            # set PR deploy preview url
+            echo "PR_PREVIEW_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
           fi
 
           # show derived parameters
@@ -102,8 +105,11 @@ jobs:
             pnpm vercel --token=${{ secrets.vercel_token }} alias set `cat domain.txt` $vercel_url
           fi
 
-          # set deployed vercel url as job output url
-          echo "VERCEL_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
+          # set vercel preview url as job output url
+          if [[ "${{ github.event_name }}" != "pull_request" ]]
+          then
+            echo "VERCEL_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Comment deploy preview URL
         uses: thollander/actions-comment-pull-request@v2
@@ -113,7 +119,7 @@ jobs:
         with:
           message: |
             :white_check_mark: Preview
-            ${{ steps.vercel_deploy.outputs.VERCEL_URL }}
+            ${{ steps.vercel_deploy.outputs.PR_PREVIEW_URL }}
 
             Built with commit ${{ github.event.pull_request.head.sha }}.
           comment_tag: execution
