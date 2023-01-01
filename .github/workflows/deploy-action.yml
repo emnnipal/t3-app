@@ -73,6 +73,9 @@ jobs:
           echo prodFlag: $prodFlag
 
           vercel pull --yes $environment --token=${{ secrets.vercel_token }}
+
+          # upon project setup, override build command in vercel with `next build --no-lint` to disable linting
+          # next, override install command as empty to disable installation in vercel build command
           vercel build $prodFlag --token=${{ secrets.vercel_token }}
         # vercel deploy --prebuilt $prodFlag --token=${{ secrets.vercel_token }}
 
