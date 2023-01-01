@@ -108,6 +108,7 @@ jobs:
           # set vercel preview url as job output url
           if [[ "${{ github.event_name }}" != "pull_request" ]]
           then
+            echo Set Environment URL
             echo "VERCEL_URL=https://${vercel_url}" >> $GITHUB_OUTPUT
           fi
 
