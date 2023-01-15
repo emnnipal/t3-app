@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import { trpc } from '../utils/trpc';
+import { api } from '../utils/api';
 
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
@@ -17,4 +17,4 @@ const MyApp: AppType<{ session: Session | null }> = ({
   </SessionProvider>
 );
 
-export default trpc.withTRPC(MyApp);
+export default api.withTRPC(MyApp);
