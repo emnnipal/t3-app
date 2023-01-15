@@ -93,7 +93,7 @@ jobs:
           pnpm vercel --token=${{ secrets.vercel_token }} pull --yes $environment
 
           # on project setup, override the following
-          # - build command in vercel with `next build --no-lint` to disable linting
+          # - build command in vercel with `next build --no-lint` to disable linting or `pnpm build`
           # - install command as empty to disable installation in vercel build command
           pnpm vercel --token=${{ secrets.vercel_token }} build $prod_flag
 
