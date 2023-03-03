@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "pnpm",
+    "commitlint",
+    "tailwindcss",
+    "trpc",
+    "superjson",
+    "typesafe",
+    "authed",
+    "tanstack",
+    "clientvar",
+    "unauthed",
+    "datasource",
+    "sqlserver",
+    "cuid",
+    "nextauth",
+    "tsbuildinfo"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "node_modules/",
+    "build/",
+    "coverage/",
+    ".husky",
+    "pnpm-lock.yaml",
+    "package.json",
+    "tsconfig.*.tsbuildinfo",
+    "tsconfig.tsbuildinfo",
+    "*.sqlite"
+  ]
+}
