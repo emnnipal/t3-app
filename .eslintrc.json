@@ -22,7 +22,7 @@
     "no-prototype-builtins": "off",
     "class-methods-use-this": "off",
     "linebreak-style": "off",
-    "no-undef": "off", // set to error for javascript repositories
+    "no-undef": "off",
     "no-console": "error",
     "prefer-default-export": "off",
     "import/prefer-default-export": "off",
@@ -67,7 +67,7 @@
         "unnamedComponents": "arrow-function"
       }
     ],
-    "react/require-default-props": "off", // Since we are not using prop-types
+    "react/require-default-props": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/naming-convention": [
       "error",
