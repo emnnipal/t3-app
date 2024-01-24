@@ -33,7 +33,7 @@ jobs:
       VERCEL_DOMAIN: t3-stack-app.vercel.app
     steps:
       - name: Checkout ${{ inputs.branch }} branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
 
